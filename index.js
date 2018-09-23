@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 const resolve = require('path').resolve
 const app = require('express')()
-const port = 4200
+const port = process.env.NODE_PORT || 4200
 const server = app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 var io = require('socket.io')(server);
 const browsers = {};
