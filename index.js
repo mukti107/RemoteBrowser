@@ -37,8 +37,10 @@ io.on('connection', (socket) => {
 				browsers[id].keyboard.press(key);
 				break;
 			case 'click':
-				const {widthRatio, heightRatio} = event.data;
-				const {height, width} = browsers[id].viewport()
+				const widthRatio = event.data.widthRatio;
+				const heightRatio = event.data.heightRatio;
+				const height = browsers[id].viewport().height;
+				const width = browsers[id].viewport().width;
 				const x = widthRatio * width;
 				const y = heightRatio * height; 
 				browsers[id].mouse.click(x, y);
