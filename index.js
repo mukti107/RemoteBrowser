@@ -21,10 +21,11 @@ io.on('connection', (socket) => {
 	const id = socket.id;
 	const timer = setInterval(sendScreenshot(id, socket), 700);
 	if(!browsers[id]){
-		puppeteer.launch().then(async (browser)=>{
-		  	browsers[id] = await browser.newPage();
-	  	    // await browsers[id].setViewport({width: 1366, height: 768});
-	  		browsers[id].goto('https://web.skype.com/en/');
+		puppeteer.launch().then((browser)=>{
+		  	browser.newPage().then((page)=>{
+		  		browsers[id] = page;
+		  		browsers[id].goto('https://web.skype.com/en/');
+		  	});
 	  });
 	}
 	socket.on('event', (event)=>{
