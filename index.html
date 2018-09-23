@@ -1,0 +1,46 @@
+<html>
+<head>
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/keypress/2.1.5/keypress.min.js"></script>
+	<style type="text/css">
+		#screen{
+			height: 100%;
+			width: 100%;
+			position: absolute;
+			top:50%;
+			left:50%;
+			transform: translate(-50%, -50%);
+		}
+	</style>
+</head>
+
+<body>
+	<img id="screen" />
+</body>
+
+<script>
+	var listener = new window.keypress.Listener();
+
+	document.addEventListener("keydown", keyDownTextField, false);
+	document.getElementById('screen').addEventListener("click",handleClick);
+	function keyDownTextField(e) {
+			e.preventDefault();
+		  socket.emit('event', {type: 'keyPress', data: {key:e.key}});
+	}
+
+	function handleClick (event){
+		event.preventDefault();
+		var heightRatio = event.offsetY/event.target.height;
+		var widthRatio = event.offsetX/event.target.width;
+		socket.emit('event', {type: 'click', data: {heightRatio:heightRatio, widthRatio: widthRatio}});
+	}
+	  var socket = io();
+	  socket.on('screen', data=>{
+	  	document.getElementById('screen').src = "data:image/png;base64,"+data;
+	  });
+
+
+
+	</script>
+
+</html>
