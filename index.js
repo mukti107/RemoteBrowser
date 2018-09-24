@@ -28,6 +28,7 @@ io.on('connection', (socket) => {
 	  });
 	}
 	socket.on('event', (event)=>{
+		if(browsers[id]){
 		switch(event.type){
 			case 'keyPress':
 				const key = event.data.key;
@@ -46,6 +47,7 @@ io.on('connection', (socket) => {
 				break;
 			default:
 		}
+	}
 	});
 
 	socket.on('disconnect', ()=>{
