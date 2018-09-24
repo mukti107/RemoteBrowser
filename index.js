@@ -24,6 +24,7 @@ io.on('connection', (socket) => {
 		  	browser.newPage().then((page)=>{
 		  		browsers[id] = page;
 		  		browsers[id].goto('https://web.skype.com/en/');
+		  		socket.emit('init', {});
 		  	});
 	  });
 	}
@@ -45,12 +46,16 @@ io.on('connection', (socket) => {
 				const y = heightRatio * height; 
 				browsers[id].mouse.click(x, y);
 				break;
+				case 'dimension':
+					browsers[id].setViewport(event.data);
+				break;
 			default:
 		}
 	}
 	});
 
 	socket.on('disconnect', ()=>{
+		clearInterval(timer);
 		browsers[id].close();
 		delete browsers[id];
 	});

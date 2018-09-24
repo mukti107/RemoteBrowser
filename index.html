@@ -1,7 +1,6 @@
 <html>
 <head>
 <script src="/socket.io/socket.io.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/keypress/2.1.5/keypress.min.js"></script>
 	<style type="text/css">
 		#screen{
 			height: 100%;
@@ -19,9 +18,8 @@
 </body>
 
 <script>
-	var listener = new window.keypress.Listener();
-
 	document.addEventListener("keydown", keyDownTextField, false);
+	window.addEventListener("resize", sendDimensions, false);
 	document.getElementById('screen').addEventListener("click",handleClick);
 	function keyDownTextField(e) {
 			e.preventDefault();
@@ -34,12 +32,18 @@
 		var widthRatio = event.offsetX/event.target.width;
 		socket.emit('event', {type: 'click', data: {heightRatio:heightRatio, widthRatio: widthRatio}});
 	}
+	function sendDimensions(){
+		var ratio = window.innerWidth/window.innerHeight;
+		var height = 800;
+
+	  	socket.emit('event', {type: 'dimension', data: {width: Math.round(height*ratio), height: height}});
+  	}
 	  var socket = io();
 	  socket.on('screen', data=>{
 	  	document.getElementById('screen').src = "data:image/png;base64,"+data;
 	  });
 
-
+	  socket.on('init', sendDimensions);
 
 	</script>
 
